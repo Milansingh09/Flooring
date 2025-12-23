@@ -13,9 +13,9 @@ const HeroSection: React.FC = () => {
     <section
       style={{
         position: "relative",
-        height: "100vh",
+        minHeight: "100vh",
         width: "100%",
-        overflow: "hidden", // 🔒 ABSOLUTE LOCK
+        overflow: "hidden",
         backgroundColor: COLORS.bgMain,
       }}
     >
@@ -46,29 +46,32 @@ const HeroSection: React.FC = () => {
           inset: 0,
           zIndex: 1,
           background:
-            "linear-gradient(to bottom, rgba(18,18,18,0.35), rgba(18,18,18,0.85))",
+            "linear-gradient(to bottom, rgba(18,18,18,0.4), rgba(18,18,18,0.9))",
         }}
       />
 
       {/* ================= BACKGROUND BRAND ================= */}
-      <div
-        style={{
-          position: "absolute",
-          top: "6vh",
-          left: 0,
-          right: 0,
-          zIndex: 2,
-          pointerEvents: "none",
-        }}
-      >
+<div
+  style={{
+    position: "absolute",
+    top: "clamp(2vh, 5vh, 8vh)", // ⬆️ move slightly up
+    left: "-8vw",               // ⬅️ allow breathing room
+    right: "-8vw",              // ➡️ allow breathing room
+    zIndex: 2,
+    pointerEvents: "none",
+    textAlign: "center",
+  }}
+>
+
         <span
           style={{
             display: "block",
-            fontSize: "clamp(5rem, 20vw, 14.5rem)",
+      fontSize: "clamp(3rem, 16vw, 14.5rem)",
+
             fontFamily: "Playfair Display, serif",
             fontWeight: 700,
             letterSpacing: "-0.04em",
-            color: "rgba(255,212,0,0.62)",
+            color: "rgba(255,212,0,0.55)",
             lineHeight: 1,
             whiteSpace: "nowrap",
             filter: "blur(1px)",
@@ -78,12 +81,12 @@ const HeroSection: React.FC = () => {
         </span>
       </div>
 
-      {/* ================= CONTENT WRAPPER ================= */}
+      {/* ================= CONTENT ================= */}
       <div
         style={{
           position: "relative",
           zIndex: 3,
-          height: "100%",
+          minHeight: "100vh",
           display: "flex",
           alignItems: "center",
         }}
@@ -91,9 +94,8 @@ const HeroSection: React.FC = () => {
         <div
           style={{
             width: "100%",
-            maxWidth: "1600px",
-            paddingLeft: "8vw",
-            paddingRight: "4vw",
+            maxWidth: "1400px",
+            padding: "0 clamp(1.2rem, 6vw, 8vw)",
           }}
         >
           <motion.h1
@@ -101,16 +103,15 @@ const HeroSection: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9 }}
             style={{
-              fontSize: "clamp(2.6rem, 4.5vw, 4.2rem)",
-              marginBottom: "20px",
+              fontSize: "clamp(2.1rem, 6vw, 4.2rem)",
+              marginBottom: "16px",
               lineHeight: 1.1,
               color: COLORS.textPrimary,
               maxWidth: "720px",
               fontWeight: 600,
             }}
           >
-            Advertising <br />
-            That Moves
+            Advertising <br /> That Moves
           </motion.h1>
 
           <motion.h2
@@ -118,11 +119,11 @@ const HeroSection: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 0.15 }}
             style={{
-              fontSize: "clamp(1.6rem, 3vw, 2.2rem)",
-              marginBottom: "24px",
+              fontSize: "clamp(1.3rem, 4.5vw, 2.2rem)",
+              marginBottom: "20px",
               lineHeight: 1.2,
               color: COLORS.accent,
-              letterSpacing: "0.04em",
+              letterSpacing: "0.08em",
               maxWidth: "760px",
             }}
           >
@@ -134,10 +135,10 @@ const HeroSection: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 0.35 }}
             style={{
-              fontSize: "clamp(1.05rem, 2.3vw, 1.25rem)",
+              fontSize: "clamp(0.95rem, 3.2vw, 1.25rem)",
               maxWidth: "680px",
               color: COLORS.textSecondary,
-              lineHeight: 1.65,
+              lineHeight: 1.6,
             }}
           >
             High-impact cinema, transit, and OOH advertising — crafted to
@@ -146,31 +147,37 @@ const HeroSection: React.FC = () => {
         </div>
       </div>
 
-      {/* ================= BOTTOM NAV TEXT ================= */}
+      {/* ================= BOTTOM NAV ================= */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.6 }}
         style={{
           position: "absolute",
-          bottom: "40px",
+          bottom: "clamp(20px, 5vw, 40px)",
           left: 0,
           right: 0,
           display: "flex",
           justifyContent: "center",
-          gap: "48px",
+          flexWrap: "wrap",
+          gap: "clamp(16px, 6vw, 48px)",
           zIndex: 4,
-          fontSize: "0.85rem",
-          letterSpacing: "0.12em",
+          fontSize: "clamp(0.65rem, 2.5vw, 0.85rem)",
+          letterSpacing: "0.14em",
           textTransform: "uppercase",
           color: COLORS.textSecondary,
+          padding: "0 1rem",
+          textAlign: "center",
         }}
       >
         {["Cinema Advertising", "Transit Media", "OOH Experiences"].map(
           (item) => (
             <span
               key={item}
-              style={{ cursor: "pointer", transition: "all 0.35s ease" }}
+              style={{
+                cursor: "pointer",
+                transition: "all 0.35s ease",
+              }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.color = COLORS.accent;
                 e.currentTarget.style.transform = "translateY(-6px)";
