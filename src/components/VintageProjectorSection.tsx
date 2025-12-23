@@ -12,63 +12,75 @@ const COLORS = {
    🎛 MANUAL POSITION CONFIGS (EDIT FREELY)
 ===================================================== */
 
-const DESKTOP = {
+type LayoutConfig = {
+  projectorWidth: string;
+  projectorMinWidth: string;
+  projectorMarginLeft: string;
+
+  beamLeft: string;
+  beamTop: string;
+  beamWidth: string;
+  beamHeight: string;
+
+  reelRight: string;
+  reelWidth: string;
+
+  textLeft: string;
+  textBottom: string;
+  textMaxWidth: string;
+};
+
+
+const DESKTOP: LayoutConfig = {
   projectorWidth: "8%",
   projectorMinWidth: "260px",
   projectorMarginLeft: "2vw",
-
   beamLeft: "8%",
   beamTop: "49%",
   beamWidth: "48%",
   beamHeight: "55%",
-
   reelRight: "-1vw",
   reelWidth: "55%",
-
   textLeft: "8vw",
   textBottom: "4%",
   textMaxWidth: "420px",
 };
 
-const TABLET = {
+const TABLET: LayoutConfig = {
   projectorWidth: "12%",
   projectorMinWidth: "220px",
   projectorMarginLeft: "1.5vw",
-
   beamLeft: "10%",
   beamTop: "50%",
   beamWidth: "50%",
   beamHeight: "21%",
-
   reelRight: "-4vw",
   reelWidth: "65%",
-
   textLeft: "6vw",
   textBottom: "5%",
   textMaxWidth: "360px",
 };
 
-const MOBILE = {
+const MOBILE: LayoutConfig = {
   projectorWidth: "140px",
   projectorMinWidth: "140px",
   projectorMarginLeft: "0.2rem",
-
   beamLeft: "0%",
   beamTop: "50%",
   beamWidth: "47%",
   beamHeight: "23%",
-
   reelRight: "32%",
   reelWidth: "90%",
-
   textLeft: "6%",
   textBottom: "6%",
   textMaxWidth: "90%",
 };
 
+
 const VintageProjectorSection = () => {
   const [isHovered, setIsHovered] = useState(false);
-  const [layout, setLayout] = useState(DESKTOP);
+  const [layout, setLayout] = useState<LayoutConfig>(DESKTOP);
+
 
   /* =====================================================
      📱 SCREEN DETECTION (ONLY SELECTS CONFIG)
