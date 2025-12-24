@@ -185,22 +185,63 @@ style={{
           OOH Media
         </span>
       </div>
-      <style>
+<style>
 {`
-  /* Desktop & tablet untouched */
-  .featured-split-section {
-    width: 100%;
+/* ================= DEFAULT (DESKTOP & TABLET) ================= */
+.featured-split-section {
+  width: 100%;
+}
+
+/* ================= 📱 MOBILE ONLY ================= */
+/* ================= 📱 MOBILE ONLY ================= */
+@media (max-width: 767px) {
+
+  /* 🔹 LEFT column */
+  .featured-split-section > div:nth-of-type(1) {
+    width: 42px !important;
+    min-width: 42px !important;
   }
 
-  /* 📱 MOBILE ONLY */
-  @media (max-width: 767px) {
-    .featured-split-section {
-      max-width: 100vw;
-      overflow-x: hidden;
-    }
+  /* 🔹 RIGHT column */
+  .featured-split-section > div:nth-of-type(3) {
+    width: 42px !important;
+    min-width: 42px !important;
   }
+
+  /* 🔹 Vertical text inside side columns */
+  .featured-split-section > div:nth-of-type(1) span,
+  .featured-split-section > div:nth-of-type(3) span {
+    font-size: 0.6rem !important;
+    letter-spacing: 0.14em !important;
+    transform: rotate(180deg) translateY(-4px);
+  }
+
+  /* 🔹 Center video gutters */
+  .featured-split-section > div:nth-of-type(2) {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+
+  /* 🔹 LEFT edge label inside video */
+  .featured-split-section > div:nth-of-type(2) > div:nth-of-type(1) {
+    left: 2px !important;
+    bottom: 12px !important;
+    font-size: 0.85rem !important;
+    letter-spacing: 0.18em !important;
+  }
+
+  /* 🔹 RIGHT edge label inside video */
+  .featured-split-section > div:nth-of-type(2) > div:nth-of-type(2) {
+    right: 2px !important;
+    top: 12px !important;
+    font-size: 0.85rem !important;
+    letter-spacing: 0.18em !important;
+  }
+}
+
 `}
 </style>
+
 
     </section>
   );

@@ -6,7 +6,10 @@ const COLORS = {
   textSecondary: "rgba(255,255,255,0.75)",
   accent: "#FFD400",
 };
-const isMobile = typeof window !== "undefined" && window.innerWidth <= 767;
+const isMobile =
+  typeof window !== "undefined" &&
+  window.matchMedia("(max-width: 767px)").matches;
+
 
 
 const movies = [
