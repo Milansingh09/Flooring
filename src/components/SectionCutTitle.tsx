@@ -1,8 +1,18 @@
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 
 const SectionCutTitle = () => {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
   return (
     <section
+    className="section-cut-title"
       style={{
         position: "relative",
         height: "120px",        // visible window
@@ -27,9 +37,11 @@ const SectionCutTitle = () => {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, ease: "easeOut" }}
           style={{
-            fontSize: "clamp(5rem, 16vw, 14rem)",
+            fontSize: isMobile
+              ? "clamp(3.2rem, 14vw, 7rem)"   // 📱 MOBILE
+              : "clamp(5rem, 16vw, 14rem)", // 🖥 DESKTOP
             fontWeight: 700,
-            letterSpacing: "0.25em",
+            letterSpacing: isMobile ? "0.18em" : "0.25em",
             textTransform: "uppercase",
             color: "rgba(255,255,255,0.08)",
             whiteSpace: "nowrap",
@@ -40,6 +52,23 @@ const SectionCutTitle = () => {
           Projects
         </motion.h2>
       </div>
+      <style>
+{`
+  /* Desktop & tablet untouched */
+  .section-cut-title {
+    width: 100%;
+  }
+
+  /* 📱 MOBILE ONLY */
+  @media (max-width: 767px) {
+    .section-cut-title {
+      max-width: 100vw;
+      overflow-x: hidden;
+    }
+  }
+`}
+</style>
+
     </section>
   );
 };

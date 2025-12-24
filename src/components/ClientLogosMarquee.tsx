@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const COLORS = {
   bg: "#121212",
@@ -19,13 +19,23 @@ const logos = [
 const ClientLogosMarquee = () => {
   const [paused, setPaused] = useState(false);
   const [hovered, setHovered] = useState<number | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  /* 📱 MOBILE DETECTION */
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
 
   return (
     <section
       style={{
         backgroundColor: COLORS.bg,
-        padding: "10px 0",
-        overflow: "hidden", // 🔒 SAFETY
+        padding: isMobile ? "6px 0" : "10px 0",
+        overflow: "hidden", // 🔒 LOCAL SAFETY
+        maxWidth: "100vw",
       }}
     >
       {/* TITLE */}
@@ -36,8 +46,10 @@ const ClientLogosMarquee = () => {
         viewport={{ once: true }}
         style={{
           textAlign: "center",
-          fontSize: "clamp(1.6rem, 3vw, 2.2rem)",
-          letterSpacing: "0.2em",
+          fontSize: isMobile
+            ? "clamp(1.2rem, 5vw, 1.6rem)"
+            : "clamp(1.6rem, 3vw, 2.2rem)",
+          letterSpacing: isMobile ? "0.16em" : "0.2em",
           textTransform: "uppercase",
           marginBottom: "16px",
           color: COLORS.textSecondary,
@@ -51,11 +63,11 @@ const ClientLogosMarquee = () => {
         style={{
           position: "relative",
           width: "100%",
-          height: "140px",
+          height: isMobile ? "100px" : "140px",
           overflow: "hidden", // 🔒 HARD CLIP
         }}
       >
-        {/* MOVING STRIP (ABSOLUTE = NO SCROLL) */}
+        {/* MOVING STRIP */}
         <motion.div
           animate={{
             x: paused ? undefined : ["0%", "-50%"],
@@ -66,12 +78,12 @@ const ClientLogosMarquee = () => {
             repeat: Infinity,
           }}
           style={{
-            position: "absolute", // 🔑 KEY FIX
+            position: "absolute",
             left: 0,
             top: 0,
             display: "flex",
-            gap: "86px",
-            width: "200%", // duplicated content width
+            gap: isMobile ? "48px" : "86px",
+            width: "200%",
             alignItems: "center",
           }}
         >
@@ -87,8 +99,8 @@ const ClientLogosMarquee = () => {
                 setHovered(null);
               }}
               style={{
-                width: "200px",
-                height: "120px",
+                width: isMobile ? "140px" : "200px",
+                height: isMobile ? "80px" : "120px",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -101,26 +113,22 @@ const ClientLogosMarquee = () => {
               <motion.img
                 src={logo.src}
                 alt={logo.name}
-                animate={{
-                  opacity: hovered === index ? 0 : 1,
-                }}
+                animate={{ opacity: hovered === index ? 0 : 1 }}
                 transition={{ duration: 0.3 }}
                 style={{
-                  maxWidth: "160px", // ⬆️ BIGGER
-                  maxHeight: "80px",
+                  maxWidth: isMobile ? "110px" : "160px",
+                  maxHeight: isMobile ? "56px" : "80px",
                   objectFit: "contain",
                 }}
               />
 
               {/* NAME */}
               <motion.span
-                animate={{
-                  opacity: hovered === index ? 1 : 0,
-                }}
+                animate={{ opacity: hovered === index ? 1 : 0 }}
                 transition={{ duration: 0.3 }}
                 style={{
                   position: "absolute",
-                  fontSize: "0.95rem",
+                  fontSize: isMobile ? "0.75rem" : "0.95rem",
                   letterSpacing: "0.14em",
                   textTransform: "uppercase",
                   color: COLORS.textPrimary,
@@ -139,7 +147,7 @@ const ClientLogosMarquee = () => {
             position: "absolute",
             top: 0,
             left: 0,
-            width: "140px",
+            width: isMobile ? "64px" : "140px",
             height: "100%",
             background:
               "linear-gradient(to right, #121212, transparent)",
@@ -152,7 +160,7 @@ const ClientLogosMarquee = () => {
             position: "absolute",
             top: 0,
             right: 0,
-            width: "140px",
+            width: isMobile ? "64px" : "140px",
             height: "100%",
             background:
               "linear-gradient(to left, #121212, transparent)",

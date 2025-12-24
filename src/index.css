@@ -83,3 +83,9 @@ button:focus-visible {
 .animate-marquee {
   animation: marquee 25s linear infinite;
 }
+
+html, body {
+  width: 100%;
+  max-width: 100%;
+
+}

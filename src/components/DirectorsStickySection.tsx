@@ -1,5 +1,5 @@
 import { motion, useScroll, useMotionValueEvent } from "framer-motion";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 
 const COLORS = {
   bg: "#121212",
@@ -39,28 +39,38 @@ const directors = [
   },
 ];
 
-const END_BUFFER = 1; 
+const END_BUFFER = 1;
+
 const DirectorsStickySection = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
 
+  /* ---------------- MOBILE DETECTION ---------------- */
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
+  /* ---------------- SCROLL LOGIC ---------------- */
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start start", "end start"],
   });
 
-useMotionValueEvent(scrollYProgress, "change", (latest) => {
-  const totalSteps = directors.length + END_BUFFER;
-  const rawIndex = Math.floor(latest * totalSteps);
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    const totalSteps = directors.length + END_BUFFER;
+    const rawIndex = Math.floor(latest * totalSteps);
 
-  const clampedIndex = Math.min(
-    directors.length - 1,
-    Math.max(0, rawIndex)
-  );
+    const clampedIndex = Math.min(
+      directors.length - 1,
+      Math.max(0, rawIndex)
+    );
 
-  setActiveIndex(clampedIndex);
-});
-
+    setActiveIndex(clampedIndex);
+  });
 
   const director = directors[activeIndex];
 
@@ -72,7 +82,7 @@ useMotionValueEvent(scrollYProgress, "change", (latest) => {
         backgroundColor: COLORS.bg,
       }}
     >
-      {/* ✅ STICKY CONTAINER — NO MOTION HERE */}
+      {/* STICKY CONTAINER */}
       <div
         style={{
           position: "sticky",
@@ -88,7 +98,7 @@ useMotionValueEvent(scrollYProgress, "change", (latest) => {
           style={{
             position: "absolute",
             top: "64px",
-            left: "8vw",
+            left: isMobile ? "1.25rem" : "8vw",
             fontSize: "0.85rem",
             letterSpacing: "0.3em",
             textTransform: "uppercase",
@@ -98,15 +108,14 @@ useMotionValueEvent(scrollYProgress, "change", (latest) => {
           Our Directors
         </div>
 
-        {/* ✅ NON-STICKY WRAPPER */}
+        {/* CONTENT WRAPPER */}
         <div
           style={{
             maxWidth: "1400px",
             width: "100%",
-            padding: "0 8vw",
+            padding: isMobile ? "0 1.25rem" : "0 8vw",
           }}
         >
-          {/* ✅ MOTION ONLY INSIDE */}
           <motion.div
             key={activeIndex}
             initial={{ opacity: 0, y: 120 }}
@@ -114,8 +123,10 @@ useMotionValueEvent(scrollYProgress, "change", (latest) => {
             transition={{ duration: 0.7, ease: "easeOut" }}
             style={{
               display: "flex",
-              gap: "96px",
+              flexDirection: isMobile ? "column" : "row",
               alignItems: "center",
+              gap: isMobile ? "32px" : "96px",
+              maxWidth: "100%",
             }}
           >
             {/* IMAGE */}
@@ -123,17 +134,22 @@ useMotionValueEvent(scrollYProgress, "change", (latest) => {
               src={director.image}
               alt={director.name}
               style={{
-                width: "340px",
-                height: "460px",
+                width: isMobile ? "220px" : "340px",
+                height: isMobile ? "300px" : "460px",
                 objectFit: "cover",
               }}
             />
 
             {/* TEXT */}
-            <div style={{ maxWidth: "420px" }}>
+            <div
+              style={{
+                maxWidth: "420px",
+                textAlign: isMobile ? "center" : "left",
+              }}
+            >
               <h3
                 style={{
-                  fontSize: "2.6rem",
+                  fontSize: isMobile ? "2rem" : "2.6rem",
                   marginBottom: "8px",
                   color: COLORS.textPrimary,
                 }}

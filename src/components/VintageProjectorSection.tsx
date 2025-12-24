@@ -62,18 +62,18 @@ const TABLET: LayoutConfig = {
 };
 
 const MOBILE: LayoutConfig = {
-  projectorWidth: "140px",
-  projectorMinWidth: "140px",
+  projectorWidth: "100px",
+  projectorMinWidth: "100px",
   projectorMarginLeft: "0.2rem",
   beamLeft: "0%",
   beamTop: "50%",
-  beamWidth: "47%",
-  beamHeight: "23%",
-  reelRight: "32%",
-  reelWidth: "90%",
+  beamWidth: "62%",
+  beamHeight: "16%",
+  reelRight: "27%",
+  reelWidth: "74%",
   textLeft: "6%",
   textBottom: "6%",
-  textMaxWidth: "90%",
+  textMaxWidth: "91%",
 };
 
 
@@ -100,16 +100,20 @@ const VintageProjectorSection = () => {
 
   return (
     <section
+        className="vintage-section"
+
       style={{
         position: "relative",
         height: "100vh",
         width: "100%",
         backgroundColor: COLORS.bg,
-        overflow: "hidden",
+        contain: "paint",
         display: "flex",
         alignItems: "center",
       }}
     >
+      
+      
       {/* ================= PROJECTOR ================= */}
       <motion.img
         src="/images/projector.jpg"
@@ -125,6 +129,7 @@ const VintageProjectorSection = () => {
           filter: "invert(1) grayscale(100%) contrast(1.1)",
         }}
       />
+
 
       {/* ================= LIGHT BEAM ================= */}
       <div
@@ -238,6 +243,23 @@ const VintageProjectorSection = () => {
           to move an audience.
         </p>
       </motion.div>
+      <style>
+  {`
+    /* DEFAULT: desktop & tablet untouched */
+    .vintage-section {
+      width: 100%;
+    }
+
+    /* 📱 MOBILE ONLY — clamp viewport */
+    @media (max-width: 767px) {
+      .vintage-section {
+         max-width: 100vw;
+        overflow-x: hidden;
+      }
+    }
+  `}
+</style>
+
     </section>
   );
 };

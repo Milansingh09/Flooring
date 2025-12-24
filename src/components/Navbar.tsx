@@ -1,6 +1,16 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
+import type { MotionStyle } from "framer-motion";
+
+const barStyle: MotionStyle = {
+  position: "absolute",
+  width: "28px",
+  height: "2px",
+  backgroundColor: "#FFD400",
+  borderRadius: "2px",
+};
+
 const navItems = [
   { label: "Home", href: "#hero" },
   { label: "Projects", href: "#projects" },
@@ -8,6 +18,8 @@ const navItems = [
   { label: "Directors", href: "#directors" },
   { label: "Upcoming", href: "#upcoming" },
 ];
+
+
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -44,6 +56,8 @@ export default function Navbar() {
           position: "fixed",
           top: 0,
           width: "100%",
+          maxWidth: "100vw",
+           overflowX: "hidden",
           zIndex: 50,
           backgroundColor: scrolled
             ? "rgba(18,18,18,0.85)"
@@ -132,94 +146,130 @@ export default function Navbar() {
           </ul>
 
           {/* MOBILE HAMBURGER */}
-          <div
-            className="hamburger"
-            onClick={() => setMenuOpen((p) => !p)}
-style={{
-  width: "28px",
-  height: "20px",
-  flexDirection: "column",
-  justifyContent: "space-between",
-  cursor: "pointer",
-}}
+<div
+  className="hamburger"
+  onClick={() => setMenuOpen((p) => !p)}
+  style={{
+    position: "relative",
+    width: "28px",
+    height: "20px",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    cursor: "pointer",
+    flexShrink: 0,
+  }}
+>
+  <motion.span
+    animate={{
+      rotate: menuOpen ? 45 : 0,
+      y: menuOpen ? 0 : -6,
+    }}
+    transition={{ duration: 0.3, ease: "easeInOut" }}
+    style={barStyle}
+  />
+  <motion.span
+    animate={{
+      opacity: menuOpen ? 0 : 1,
+    }}
+    transition={{ duration: 0.2 }}
+    style={barStyle}
+  />
+  <motion.span
+    animate={{
+      rotate: menuOpen ? -45 : 0,
+      y: menuOpen ? 0 : 6,
+    }}
+    transition={{ duration: 0.3, ease: "easeInOut" }}
+    style={barStyle}
+  />
+</div>
 
-          >
-            {[0, 1, 2].map((i) => (
-              <span
-                key={i}
-                style={{
-                  height: "2px",
-                  background: "#FFD400",
-                  borderRadius: "2px",
-                }}
-              />
-            ))}
-          </div>
         </div>
       </motion.nav>
 
       {/* MOBILE MENU */}
       <AnimatePresence>
         {menuOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3 }}
-            style={{
-              position: "fixed",
-              top: "64px",
-              left: 0,
-              right: 0,
-              background: "#0B0B0B",
-              zIndex: 40,
-              padding: "24px 0",
-              textAlign: "center",
-            }}
-          >
+<motion.div
+  initial={{ opacity: 0, scaleY: 0.95 }}
+  animate={{ opacity: 1, scaleY: 1 }}
+  exit={{ opacity: 0, scaleY: 0.95 }}
+  transition={{ duration: 0.35, ease: "easeOut" }}
+  style={{
+    position: "fixed",
+    top: "64px",
+    left: 0,
+    right: 0,
+    background: "rgba(11,11,11,0.95)",
+    backdropFilter: "blur(10px)",
+    WebkitBackdropFilter: "blur(10px)",
+    zIndex: 40,
+    padding: "24px 0",
+    transformOrigin: "top",
+  }}
+>
+
             {navItems.map((item) => (
-              <a
-                key={item.label}
-                href={item.href}
-                onClick={() => setMenuOpen(false)}
-                style={{
-                  display: "block",
-                  padding: "14px 0",
-                  fontSize: "14px",
-                  letterSpacing: "0.25em",
-                  textTransform: "uppercase",
-                  color:
-                    active === item.label ? "#FFD400" : "#ffffff",
-                  textDecoration: "none",
-                }}
-              >
-                {item.label}
-              </a>
+<motion.a
+  key={item.label}
+  href={item.href}
+  onClick={() => setMenuOpen(false)}
+  style={{
+    position: "relative",
+    display: "block",
+    padding: "16px 0",
+    fontSize: "14px",
+    letterSpacing: "0.25em",
+    textTransform: "uppercase",
+    color: "#ffffff",
+    textDecoration: "none",
+    overflow: "hidden",
+  }}
+>
+  {active === item.label && (
+    <motion.span
+      layoutId="mobile-highlight"
+      style={{
+        position: "absolute",
+        inset: 0,
+        background: "rgba(255,212,0,0.15)",
+        zIndex: -1,
+      }}
+      transition={{ duration: 0.35, ease: "easeOut" }}
+    />
+  )}
+  {item.label}
+</motion.a>
+
             ))}
           </motion.div>
         )}
       </AnimatePresence>
 
       {/* RESPONSIVE RULES */}
-      <style>
-        {`
-          .navbar-links {
-            display: none;
-          }
-          .hamburger {
-            display: flex;
-          }
+<style>
+  {`
+    .navbar-links {
+      display: none;
+    }
 
-          @media (min-width: 768px) {
-            .navbar-links {
-              display: flex;
-            }
-            .hamburger {
-              display: none;
-            }
-          }
-        `}
-      </style>
+    .hamburger {
+      display: flex;
+    }
+
+    @media (min-width: 768px) {
+      .navbar-links {
+        display: flex;
+      }
+
+      .hamburger {
+        display: none;
+      }
+    }
+  `}
+</style>
+
     </>
   );
 }

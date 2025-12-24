@@ -1,5 +1,5 @@
-import React from "react";
-import { motion } from "framer-motion";
+import React, { useEffect, useRef, useState } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 
 const COLORS = {
   bgMain: "#121212",
@@ -9,13 +9,72 @@ const COLORS = {
 };
 
 const HeroSection: React.FC = () => {
+  /* -----------------------------------------------------
+     SECTION REF (scoped scroll)
+  ----------------------------------------------------- */
+  const sectionRef = useRef<HTMLElement | null>(null);
+
+  /* -----------------------------------------------------
+     MOBILE DETECTION
+  ----------------------------------------------------- */
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
+  /* -----------------------------------------------------
+     MEDIAHOUSE — MOBILE-ONLY SCROLL MOVE
+  ----------------------------------------------------- */
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end start"],
+  });
+
+  const brandY = useTransform(
+    scrollYProgress,
+    [0, 1],
+    isMobile ? [0, 280] : [0, 0]
+  );
+
+  /* -----------------------------------------------------
+     MOBILE-ONLY SEQUENTIAL HOVER (BOTTOM TEXT)
+  ----------------------------------------------------- */
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (!isMobile) {
+      setActiveIndex(null);
+      return;
+    }
+
+    let i = 0;
+    const interval = setInterval(() => {
+      setActiveIndex(i);
+      i = (i + 1) % 3;
+    }, 1400);
+
+    return () => clearInterval(interval);
+  }, [isMobile]);
+
+  const bottomItems = [
+    "Cinema Advertising",
+    "Transit Media",
+    "OOH Experiences",
+  ];
+
   return (
     <section
+      ref={sectionRef}
       style={{
         position: "relative",
-        minHeight: "100vh",
+        minHeight: isMobile ? "100vh" : "100vh",
         width: "100%",
-        overflow: "hidden",
+        maxWidth: "100vw",
+       overflowX: "clip",
         backgroundColor: COLORS.bgMain,
       }}
     >
@@ -33,6 +92,8 @@ const HeroSection: React.FC = () => {
           width: "100%",
           height: "100%",
           objectFit: "cover",
+          transform: "translateZ(0)",
+
           filter: "blur(2px)",
           opacity: 0.85,
           zIndex: 0,
@@ -51,35 +112,41 @@ const HeroSection: React.FC = () => {
       />
 
       {/* ================= BACKGROUND BRAND ================= */}
-<div
-  style={{
-    position: "absolute",
-    top: "clamp(2vh, 5vh, 8vh)", // ⬆️ move slightly up
-    left: "-8vw",               // ⬅️ allow breathing room
-    right: "-8vw",              // ➡️ allow breathing room
-    zIndex: 2,
-    pointerEvents: "none",
-    textAlign: "center",
-  }}
->
-
+      <motion.div
+        style={{
+          position: "absolute",
+          top: "clamp(2vh, 5vh, 8vh)",
+          left: "-8vw",
+          right: "-8vw",
+          zIndex: 2,
+          pointerEvents: "none",
+          textAlign: "center",
+          y: brandY,
+          willChange: "transform",
+        }}
+      >
         <span
           style={{
             display: "block",
-      fontSize: "clamp(3rem, 16vw, 14.5rem)",
-
+            fontSize: "clamp(3rem, 16vw, 14.5rem)",
             fontFamily: "Playfair Display, serif",
             fontWeight: 700,
             letterSpacing: "-0.04em",
             color: "rgba(255,212,0,0.55)",
             lineHeight: 1,
-            whiteSpace: "nowrap",
+left: 0,
+right: 0,
+paddingInline: "4vw",
+whiteSpace: "normal",
+maxWidth: "100%",
+overflow: "hidden",
+
             filter: "blur(1px)",
           }}
         >
           MEDIAHOUSE
         </span>
-      </div>
+      </motion.div>
 
       {/* ================= CONTENT ================= */}
       <div
@@ -124,7 +191,6 @@ const HeroSection: React.FC = () => {
               lineHeight: 1.2,
               color: COLORS.accent,
               letterSpacing: "0.08em",
-              maxWidth: "760px",
             }}
           >
             Screens. Streets. Stories.
@@ -165,35 +231,28 @@ const HeroSection: React.FC = () => {
           fontSize: "clamp(0.65rem, 2.5vw, 0.85rem)",
           letterSpacing: "0.14em",
           textTransform: "uppercase",
-          color: COLORS.textSecondary,
           padding: "0 1rem",
-          textAlign: "center",
         }}
       >
-        {["Cinema Advertising", "Transit Media", "OOH Experiences"].map(
-          (item) => (
+        {bottomItems.map((item, index) => {
+          const isActive = isMobile && activeIndex === index;
+
+          return (
             <span
               key={item}
               style={{
-                cursor: "pointer",
-                transition: "all 0.35s ease",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.color = COLORS.accent;
-                e.currentTarget.style.transform = "translateY(-6px)";
-                e.currentTarget.style.textShadow =
-                  "0 0 14px rgba(255,212,0,0.6)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.color = COLORS.textSecondary;
-                e.currentTarget.style.transform = "translateY(0)";
-                e.currentTarget.style.textShadow = "none";
+                transition: "all 0.6s ease",
+                color: isActive ? COLORS.accent : COLORS.textSecondary,
+                transform: isActive ? "translateY(-6px)" : "translateY(0)",
+                textShadow: isActive
+                  ? "0 0 14px rgba(255,212,0,0.6)"
+                  : "none",
               }}
             >
               {item}
             </span>
-          )
-        )}
+          );
+        })}
       </motion.div>
     </section>
   );

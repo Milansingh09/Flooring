@@ -24,6 +24,7 @@ const FeaturedProjectsSplitSection = () => {
 
   return (
     <section
+    className="featured-split-section"
       style={{
         height: "90vh",
         backgroundColor: COLORS.bg,
@@ -184,6 +185,23 @@ style={{
           OOH Media
         </span>
       </div>
+      <style>
+{`
+  /* Desktop & tablet untouched */
+  .featured-split-section {
+    width: 100%;
+  }
+
+  /* 📱 MOBILE ONLY */
+  @media (max-width: 767px) {
+    .featured-split-section {
+      max-width: 100vw;
+      overflow-x: hidden;
+    }
+  }
+`}
+</style>
+
     </section>
   );
 };
