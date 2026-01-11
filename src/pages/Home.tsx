@@ -1,18 +1,14 @@
 import HeroSection from "../components/HeroSection";
-import VintageProjectorSection from "../components/VintageProjectorSection";
-import FeaturedProjectsSection from "../components/FeaturedProjectsSection";
-import SectionCutTitle from "../components/SectionCutTitle";
-import ClientLogosMarquee from "../components/ClientLogosMarquee";
-import DirectorsStickySection from "../components/DirectorsStickySection";
-import UpcomingMoviesSection from "../components/UpcomingMoviesSection";
-
+import TechnologySection from "../components/TechnologySection";
+import FeaturesSection from "../components/FeaturesSection";
+import ProductsSection from "../components/ProductsSection";
 
 export default function Home() {
   return (
     <main
       style={{
-        backgroundColor: "#121212",
-        color: "#F5F5F5",
+        backgroundColor: "#F1EBE1",   // Brand background
+        color: "#1F2D2A",             // Primary text color
         minHeight: "100vh",
         width: "100%",
       }}
@@ -22,30 +18,14 @@ export default function Home() {
         <HeroSection />
       </section>
 
-      {/* VINTAGE */}
-      <section id="vintage">
-        <VintageProjectorSection />
-      </section>
+      
+        <TechnologySection />
 
-      {/* FEATURED PROJECTS */}
-      <section id="projects">
-        <SectionCutTitle />
-        <FeaturedProjectsSection />
+            <section id="features">
+<FeaturesSection />
       </section>
-
-      {/* CLIENTS */}
-      <section id="clients">
-        <ClientLogosMarquee />
-      </section>
-
-      {/* DIRECTORS */}
-      <section id="directors">
-        <DirectorsStickySection />
-      </section>
-
-      {/* UPCOMING */}
-      <section id="upcoming">
-        <UpcomingMoviesSection />
+                  <section id="products">
+<ProductsSection />
       </section>
     </main>
   );

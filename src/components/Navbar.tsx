@@ -1,45 +1,14 @@
 import { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import logo from "../assets/logobg.png"; // adjust if needed
 
-import type { MotionStyle } from "framer-motion";
+const navItems = ["Home", "About", "Products", "Blog", "FAQ"];
 
-const barStyle: MotionStyle = {
-  position: "absolute",
-  width: "28px",
-  height: "2px",
-  backgroundColor: "#FFD400",
-  borderRadius: "2px",
-};
-
-const navItems = [
-  { label: "Home", href: "#hero" },
-  { label: "Projects", href: "#projects" },
-  { label: "Clients", href: "#clients" },
-  { label: "Directors", href: "#directors" },
-  { label: "Upcoming", href: "#upcoming" },
-];
-
-
-
-export default function Navbar() {
+const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
-  const [hovered, setHovered] = useState<string | null>(null);
-  const [active, setActive] = useState("Home");
-  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => {
-      setScrolled(window.scrollY > 40);
-
-      navItems.forEach((item) => {
-        const el = document.querySelector(item.href);
-        if (!el) return;
-
-        const rect = el.getBoundingClientRect();
-        if (rect.top <= 120 && rect.bottom >= 120) {
-          setActive(item.label);
-        }
-      });
+      setScrolled(window.scrollY > 50);
     };
 
     window.addEventListener("scroll", onScroll);
@@ -47,229 +16,175 @@ export default function Navbar() {
   }, []);
 
   return (
-    <>
-      <motion.nav
-        initial={{ y: -80 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
+    <header
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100%",
+        zIndex: 1000,
+        padding: "0.5rem 6%",
+        display: "flex",
+        alignItems: "center",
+        background: scrolled ? "rgba(241,235,225,0.25)" : "#F1EBE1",
+        backdropFilter: scrolled ? "blur(10px)" : "none",
+        transition: "background 0.3s ease, backdrop-filter 0.3s ease",
+        boxSizing: "border-box",
+      }}
+    >
+      {/* LEFT: LOGO */}
+      <div style={{ flex: 1, display: "flex", alignItems: "center" }}>
+        <img
+          src={logo}
+          alt="Logo"
+          style={{
+            height: "48px",
+            width: "auto",
+            objectFit: "contain",
+            cursor: "pointer",
+          }}
+        />
+      </div>
+
+      {/* CENTER: NAV TABS */}
+<nav
+  style={{
+    flex: 2,
+    display: "flex",
+    justifyContent: "center", // keeps tabs centered
+    alignItems: "center",
+    gap: "2rem", // ✅ adjust spacing between tabs here
+    maxWidth: "520px",
+  }}
+>
+
+        {navItems.map((item) => (
+          <a
+            key={item}
+            href={`#${item.toLowerCase()}`}
+            className="body-font"
+            style={{
+              fontSize: "0.95rem",
+              color: "#4A5A56",
+              textDecoration: "none",
+              position: "relative",
+              padding: "0.25rem 0",
+              transition: "color 0.3s ease",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = "#45A98F";
+              const line = e.currentTarget.querySelector(
+                ".nav-underline"
+              ) as HTMLElement;
+              line.style.transform = "scaleX(1)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = "#4A5A56";
+              const line = e.currentTarget.querySelector(
+                ".nav-underline"
+              ) as HTMLElement;
+              line.style.transform = "scaleX(0)";
+            }}
+          >
+            {item}
+
+            {/* UNDERLINE */}
+            <span
+              className="nav-underline"
+              style={{
+                position: "absolute",
+                left: 0,
+                bottom: "-4px",
+                width: "100%",
+                height: "2px",
+                backgroundColor: "#45A98F", // primary accent
+                transform: "scaleX(0)",
+                transformOrigin: "left",
+                transition: "transform 0.35s ease",
+              }}
+            />
+          </a>
+        ))}
+      </nav>
+
+      {/* RIGHT: CONTACT BUTTON */}
+      <div
         style={{
-          position: "fixed",
-          top: 0,
-          width: "100%",
-          maxWidth: "100vw",
-           overflowX: "hidden",
-          zIndex: 50,
-          backgroundColor: scrolled
-            ? "rgba(18,18,18,0.85)"
-            : "transparent",
-          backdropFilter: scrolled ? "blur(12px)" : "none",
-          WebkitBackdropFilter: scrolled ? "blur(12px)" : "none",
+          flex: 1,
+          display: "flex",
+          justifyContent: "flex-end",
+          alignItems: "center",
         }}
       >
-        <div
+        <a
+          href="#contact"
           style={{
-            maxWidth: "1280px",
-            margin: "0 auto",
-            padding: "16px 24px",
+            position: "relative",
+            overflow: "hidden",
+            padding: "0.6rem 1.3rem",
+            border: "1px solid #45A98F",
+            borderRadius: "3px",
+            textDecoration: "none",
+            color: "#45A98F",
+            fontSize: "0.9rem",
+            fontWeight: 500,
             display: "flex",
-            justifyContent: "space-between",
             alignItems: "center",
-            color: "#ffffff",
+            gap: "0.4rem",
+            transition: "color 0.35s ease",
+          }}
+          onMouseEnter={(e) => {
+            const fill = e.currentTarget.querySelector(
+              ".btn-fill"
+            ) as HTMLElement;
+            const arrow = e.currentTarget.querySelector(
+              ".btn-arrow"
+            ) as HTMLElement;
+
+            fill.style.transform = "translateX(0%)";
+            arrow.style.transform = "translateX(4px)";
+            e.currentTarget.style.color = "#FFFFFF";
+          }}
+          onMouseLeave={(e) => {
+            const fill = e.currentTarget.querySelector(
+              ".btn-fill"
+            ) as HTMLElement;
+            const arrow = e.currentTarget.querySelector(
+              ".btn-arrow"
+            ) as HTMLElement;
+
+            fill.style.transform = "translateX(-100%)";
+            arrow.style.transform = "translateX(0px)";
+            e.currentTarget.style.color = "#45A98F";
           }}
         >
-          {/* LOGO */}
-          <a
-            href="#hero"
+          {/* Sliding Fill */}
+          <span
+            className="btn-fill"
             style={{
-              fontSize: "22px",
-              fontWeight: 600,
-              letterSpacing: "0.15em",
-              textDecoration: "none",
-              color: "#ffffff",
+              position: "absolute",
+              inset: 0,
+              backgroundColor: "#45A98F",
+              transform: "translateX(-100%)",
+              transition: "transform 0.4s ease",
+              zIndex: -1,
+            }}
+          />
+
+          Contact
+          <span
+            className="btn-arrow"
+            style={{
+              display: "inline-block",
+              transition: "transform 0.3s ease",
             }}
           >
-            MEDIA
-            <span style={{ color: "#FFD400" }}>HOUSE</span>
-          </a>
-
-          {/* DESKTOP + TABLET LINKS */}
-          <ul
-            className="navbar-links"
-            style={{
-              listStyle: "none",
-              gap: "32px",
-              fontSize: "11px",
-              letterSpacing: "0.25em",
-              textTransform: "uppercase",
-              margin: 0,
-              padding: 0,
-            }}
-          >
-            {navItems.map((item) => (
-              <li
-                key={item.label}
-                onMouseEnter={() => setHovered(item.label)}
-                onMouseLeave={() => setHovered(null)}
-                style={{
-                  position: "relative",
-                  cursor: "pointer",
-                  paddingBottom: "6px",
-                }}
-              >
-                <a
-                  href={item.href}
-                  style={{
-                    textDecoration: "none",
-                    color:
-                      active === item.label ? "#FFD400" : "#ffffff",
-                  }}
-                >
-                  {item.label}
-                </a>
-
-                <span
-                  style={{
-                    position: "absolute",
-                    left: 0,
-                    bottom: 0,
-                    height: "1px",
-                    width:
-                      hovered === item.label || active === item.label
-                        ? "100%"
-                        : "0%",
-                    backgroundColor: "#FFD400",
-                    transition: "width 0.3s ease",
-                  }}
-                />
-              </li>
-            ))}
-          </ul>
-
-          {/* MOBILE HAMBURGER */}
-<div
-  className="hamburger"
-  onClick={() => setMenuOpen((p) => !p)}
-  style={{
-    position: "relative",
-    width: "28px",
-    height: "20px",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    cursor: "pointer",
-    flexShrink: 0,
-  }}
->
-  <motion.span
-    animate={{
-      rotate: menuOpen ? 45 : 0,
-      y: menuOpen ? 0 : -6,
-    }}
-    transition={{ duration: 0.3, ease: "easeInOut" }}
-    style={barStyle}
-  />
-  <motion.span
-    animate={{
-      opacity: menuOpen ? 0 : 1,
-    }}
-    transition={{ duration: 0.2 }}
-    style={barStyle}
-  />
-  <motion.span
-    animate={{
-      rotate: menuOpen ? -45 : 0,
-      y: menuOpen ? 0 : 6,
-    }}
-    transition={{ duration: 0.3, ease: "easeInOut" }}
-    style={barStyle}
-  />
-</div>
-
-        </div>
-      </motion.nav>
-
-      {/* MOBILE MENU */}
-      <AnimatePresence>
-        {menuOpen && (
-<motion.div
-  initial={{ opacity: 0, scaleY: 0.95 }}
-  animate={{ opacity: 1, scaleY: 1 }}
-  exit={{ opacity: 0, scaleY: 0.95 }}
-  transition={{ duration: 0.35, ease: "easeOut" }}
-  style={{
-    position: "fixed",
-    top: "64px",
-    left: 0,
-    right: 0,
-    background: "rgba(11,11,11,0.95)",
-    backdropFilter: "blur(10px)",
-    WebkitBackdropFilter: "blur(10px)",
-    zIndex: 40,
-    padding: "24px 0",
-    transformOrigin: "top",
-  }}
->
-
-            {navItems.map((item) => (
-<motion.a
-  key={item.label}
-  href={item.href}
-  onClick={() => setMenuOpen(false)}
-  style={{
-    position: "relative",
-    display: "block",
-    padding: "16px 0",
-    fontSize: "14px",
-    letterSpacing: "0.25em",
-    textTransform: "uppercase",
-    color: "#ffffff",
-    textDecoration: "none",
-    overflow: "hidden",
-  }}
->
-  {active === item.label && (
-    <motion.span
-      layoutId="mobile-highlight"
-      style={{
-        position: "absolute",
-        inset: 0,
-        background: "rgba(255,212,0,0.15)",
-        zIndex: -1,
-      }}
-      transition={{ duration: 0.35, ease: "easeOut" }}
-    />
-  )}
-  {item.label}
-</motion.a>
-
-            ))}
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* RESPONSIVE RULES */}
-<style>
-  {`
-    .navbar-links {
-      display: none;
-    }
-
-    .hamburger {
-      display: flex;
-    }
-
-    @media (min-width: 768px) {
-      .navbar-links {
-        display: flex;
-      }
-
-      .hamburger {
-        display: none;
-      }
-    }
-  `}
-</style>
-
-    </>
+            →
+          </span>
+        </a>
+      </div>
+    </header>
   );
-}
+};
+
+export default Navbar;

@@ -1,80 +1,131 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ================================
+   GLOBAL RESET & BRAND STYLES
+================================ */
+
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  /* Brand Colors */
+  --color-primary: #45A98F;
+  --color-bg: #F1EBE1;
+  --color-text-main: #016854;
+  --color-text-soft: #4A5A56;
+
+  /* Typography */
+  --font-heading: "Victor Serif", serif;
+  --font-body: "TT Commons Pro", sans-serif;
+
+  font-family: var(--font-body);
   line-height: 1.5;
   font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+
+/* ================================
+   HTML & BODY
+================================ */
 
 html, body {
-  background: #000;
-  color: white;
+  width: 100%;
+  height: auto;
+  min-height: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  background: var(--color-bg);
+  color: var(--color-text-main);
 }
 
+/* Hide Scrollbar */
+body {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE */
+}
+body::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
+}
+
+/* Remove default Vite centering */
+body {
+  display: block;
+  place-items: unset;
+  min-width: 100%;
+  min-height: 100%;
+}
+
+/* ================================
+   TYPOGRAPHY
+================================ */
+
+.heading-font {
+  font-family: var(--font-heading);
+  color: var(--color-text-main);
+}
+
+.body-font {
+  font-family: var(--font-body);
+  color: var(--color-text-soft);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  color: var(--color-text-main);
+  font-weight: 600;
+  line-height: 1.1;
+  margin: 0;
+}
+
+p {
+  font-family: var(--font-body);
+  color: var(--color-text-soft);
+  margin: 0;
+}
+
+/* ================================
+   LINKS & BUTTONS
+================================ */
 
 a {
   font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color 0.25s ease;
 }
 a:hover {
-  color: #535bf2;
-}
-
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+  color: #2F7F6A;
 }
 
 button {
   border-radius: 8px;
   border: 1px solid transparent;
-  padding: 0.6em 1.2em;
+  padding: 0.6em 1.4em;
   font-size: 1em;
   font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
+  font-family: var(--font-body);
+  background-color: var(--color-primary);
+  color: #ffffff;
   cursor: pointer;
-  transition: border-color 0.25s;
+  transition: background-color 0.25s ease, transform 0.2s ease;
 }
 button:hover {
-  border-color: #646cff;
+  background-color: #2F7F6A;
+  transform: translateY(-1px);
 }
 button:focus,
 button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  outline: none;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
-}
+/* ================================
+   ANIMATIONS
+================================ */
+
 @keyframes marquee {
   from { transform: translateX(0); }
   to { transform: translateX(-50%); }
@@ -84,8 +135,33 @@ button:focus-visible {
   animation: marquee 25s linear infinite;
 }
 
-html, body {
-  width: 100%;
-  max-width: 100%;
+/* ================================
+   SELECTION COLOR
+================================ */
 
+::selection {
+  background: var(--color-primary);
+  color: #ffffff;
+}
+
+html, body {
+  overflow-x: hidden;   /* Prevent horizontal scroll without breaking sticky */
+}
+
+.checkout-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #45A98F;
+  transform: translateX(-100%);
+  transition: transform 0.35s ease;
+  z-index: 1;
+}
+
+.checkout-btn:hover::before {
+  transform: translateX(0);
+}
+
+.checkout-btn:hover {
+  color: #ffffff;
 }

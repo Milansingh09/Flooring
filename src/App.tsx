@@ -1,18 +1,24 @@
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
+import Preloader from "./components/Preloader";
 
 export default function App() {
   return (
-    <div className="bg-[#121212] text-[#F5F5F5] overflow-x-hidden">
-      {/* NAVBAR */}
-      <Navbar />
+    <>
+      {/* PRELOADER (runs once) */}
+      <Preloader />
 
-      {/* MAIN CONTENT */}
-      <Home />
+      <div className="bg-[#121212] text-[#F5F5F5]">
+        {/* NAVBAR */}
+        <Navbar />
 
-      {/* FOOTER */}
-      <Footer />
-    </div>
+        {/* MAIN CONTENT */}
+        <Home />
+
+        {/* FOOTER */}
+        <Footer />
+      </div>
+    </>
   );
 }
