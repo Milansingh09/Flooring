@@ -1,5 +1,5 @@
 import logo from "../assets/logobg.png"; // 🔁 update with your actual logo path
-import { Facebook, Twitter, Rss, Github, Dribbble } from "lucide-react";
+import { Facebook, Twitter, Rss, Dribbble } from "lucide-react";
 
 const Footer = () => {
   return (
